@@ -1,3 +1,56 @@
+<div class="card shadow bg-dark">
+  <div class="card-head">
+    
+  </div>
+  <div class="card-body">
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Model</th>
+          <th scope="col">Manufacturer</th>
+          <th scope="col">Class</th>
+          <th scope="col">Cost</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="SWVehicleObj">
+        <tr *ngFor="let vehicle of SWVehicleObj.results; index as i">
+          <th scope="row">{{i}}</th>
+          <td>{{vehicle.name}}</td>
+          <td>{{vehicle.model}}</td>
+          <td>{{vehicle.manufacturer}}</td>
+          <td>{{vehicle.vehicle_class}}</td>
+          <td>{{vehicle.cost_in_credits}}</td>
+          <td>
+            <button class="btn btn-sm btn-primary">Reserve</button>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="SWStarShipObj">
+          <tr *ngFor="let vehicle of SWStarShipObj.results; index as i">
+            <th scope="row">{{i}}</th>
+            <td>{{vehicle.name}}</td>
+            <td>{{vehicle.model}}</td>
+            <td>{{vehicle.manufacturer}}</td>
+            <td>{{vehicle.starship_class}}</td>
+            <td>{{vehicle.cost_in_credits}}</td>
+            <td>
+              <button class="btn btn-sm btn-primary">Reserve</button>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
+  <div class="card-footer"></div>
+</div>
+<!-- <h1>SWVehicleObj</h1>
 <p>
-    vehincle
+  {{SWVehicleObj | json}}
+</p>
+<hr> -->
+<h1>SWStarShipObj</h1>
+<p>
+  {{SWStarShipObj | json}}
 </p>

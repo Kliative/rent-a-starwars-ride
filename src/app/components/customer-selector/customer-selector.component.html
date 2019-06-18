@@ -1,3 +1,46 @@
+<!-- <h1>randomUser</h1>
 <p>
-    customer-selector.component.html
+    {{randomUser | json }}
+</p> -->
+
+<div class="card shadow">
+    <div class="card-head">
+
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col"><i class="fa fa-user"></i></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="randomUserObj">
+                <tr *ngFor="let user of randomUserObj.results; index as i">
+                    <th scope="row">{{i}}</th>
+                    <td><img class="user-image" src="{{user.picture.thumbnail}}" alt=""></td>
+                    <td>{{user.name.first | titlecase }} {{user.name.last | titlecase }}</td>
+                    <td>{{user.location.city | titlecase }}</td>
+                    <td>{{user.email}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">Reserve</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer"></div>
+</div>
+<!-- <h1>SWVehicleObj</h1>
+      <p>
+        {{SWVehicleObj | json}}
+      </p>
+      <hr> -->
+<h1>SWStarShipObj</h1>
+<p>
+    {{SWStarShipObj | json}}
 </p>

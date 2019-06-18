@@ -8,12 +8,15 @@ import { RandomUsers, RandomUser } from '../../models/user.model';
 })
 export class CustomerSelectorComponent implements OnInit {
 
-  randomUserObj:RandomUsers;
-  randomUser:RandomUser[];
+  randomUserObj: RandomUsers;
+  randomUser: RandomUser[];
 
   constructor(private _rndmUsrSrv: DataService) { }
 
   ngOnInit() {
+    this._rndmUsrSrv.getRandomUsers(5).subscribe((result: any) => {
+      this.randomUserObj = result;
+    })
   }
 
 }
