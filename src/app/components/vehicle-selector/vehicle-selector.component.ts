@@ -3,7 +3,7 @@ import { DataService } from '../../services/data.service';
 import { SWVehicleObj, SWVehicle } from '../../models/SWVehicle.model';
 import { SWVStarShipObj, SWVStarShip } from 'src/app/models/SWStarShip.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { ReservationObj } from 'src/app/models/reservationModal.model';
+import { ReservationObj } from '../../models/reservationModal.model';
 
 @Component({
   selector: 'app-vehicle-selector',
