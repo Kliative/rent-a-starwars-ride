@@ -22,6 +22,4 @@ export interface SWVehicle {
     created: string;
     edited: Date;
     url: string;
-    //
-    booked: boolean;
 }

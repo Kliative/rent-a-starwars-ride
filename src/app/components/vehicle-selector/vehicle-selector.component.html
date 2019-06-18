@@ -1,8 +1,16 @@
 <div class="card shadow bg-dark">
-  <div class="card-head">
-    
-  </div>
+
   <div class="card-body">
+    <div class="card-title">
+      <h2 class="text-light">
+        <i *ngIf="!toggleVSS" class="fa fa-car" aria-hidden="true"></i>
+        <i *ngIf="toggleVSS" class="fa fa-space-shuttle" aria-hidden="true"></i>
+        {{ toggleVSS ? ssTitle : vTitle }}
+        <button class="btn btn-sm btn-outline-light float-right" (click)="toggleVehicleStarShip()">
+          or view our <strong>{{ toggleVSS ? vTitle : ssTitle }}</strong>
+        </button>
+      </h2>
+    </div>
     <table class="table table-dark">
       <thead>
         <tr>
@@ -15,42 +23,95 @@
           <th scope="col">Action</th>
         </tr>
       </thead>
-      <tbody *ngIf="SWVehicleObj">
-        <tr *ngFor="let vehicle of SWVehicleObj.results; index as i">
-          <th scope="row">{{i}}</th>
-          <td>{{vehicle.name}}</td>
-          <td>{{vehicle.model}}</td>
-          <td>{{vehicle.manufacturer}}</td>
-          <td>{{vehicle.vehicle_class}}</td>
-          <td>{{vehicle.cost_in_credits}}</td>
-          <td>
-            <button class="btn btn-sm btn-primary">Reserve</button>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="SWStarShipObj">
-          <tr *ngFor="let vehicle of SWStarShipObj.results; index as i">
+      <div *ngIf="toggleVSS; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <tbody *ngIf="SWVehicleObj">
+          <tr *ngFor="let vehicle of SWVehicleObj.results; index as i">
             <th scope="row">{{i}}</th>
             <td>{{vehicle.name}}</td>
             <td>{{vehicle.model}}</td>
             <td>{{vehicle.manufacturer}}</td>
-            <td>{{vehicle.starship_class}}</td>
-            <td>{{vehicle.cost_in_credits}}</td>
+            <td>{{vehicle.vehicle_class}}</td>
+            <td>{{  isVehicleBooked(vehicle.cost_in_credits) ? 'BOOKED' : vehicle.cost_in_credits | number }}</td>
             <td>
-              <button class="btn btn-sm btn-primary">Reserve</button>
+              <button (click)="open(content,vehicle.url, true)" class="btn btn-sm btn-outline-warning">Reserve</button>
             </td>
           </tr>
         </tbody>
+      </ng-template>
+      <ng-template #elseBlock>
+        <tbody *ngIf="SWStarShipObj">
+          <tr *ngFor="let starShip of SWStarShipObj.results; index as i">
+            <th scope="row">{{i}}</th>
+            <td>{{starShip.name}}</td>
+            <td>{{starShip.model}}</td>
+            <td>{{starShip.manufacturer}}</td>
+            <td>{{starShip.starship_class}}</td>
+            <td [ngClass]="{'text-light':!isVehicleBooked(starShip.cost_in_credits), 'text-danger':isVehicleBooked(starShip.cost_in_credits)}"
+            >{{  isVehicleBooked(starShip.cost_in_credits) ? 'BOOKED' : starShip.cost_in_credits | number }}</td>
+            <td>
+              <button (click)="open(content,starShip.url, false)" [disabled]="isVehicleBooked(starShip.cost_in_credits)" 
+              [ngClass]="{'btn-outline-warning':!isVehicleBooked(starShip.cost_in_credits), 'btn-danger':isVehicleBooked(starShip.cost_in_credits)}"
+              class="btn btn-sm">{{  isVehicleBooked(starShip.cost_in_credits) ? 'BOOKED' : 'Reserve' }}</button>
+            </td>
+          </tr>
+        </tbody>
+      </ng-template>
+
     </table>
   </div>
-  <div class="card-footer"></div>
+  <div class="card-footer">
+    <!-- Add buttons for pagination -->
+  </div>
 </div>
-<!-- <h1>SWVehicleObj</h1>
-<p>
-  {{SWVehicleObj | json}}
-</p>
-<hr> -->
-<h1>SWStarShipObj</h1>
-<p>
-  {{SWStarShipObj | json}}
-</p>
+
+
+<ng-template #content let-modal>
+  <span *ngIf="staggedModal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Book the {{sWVehicle || sWStarShip}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <form>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="dateOfBirth">Start Date</label>
+              <div class="input-group">
+                <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dpStart" ngbDatepicker
+                  #dpStart="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dpStart.toggle()" type="button"><i
+                      class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="dateOfBirth">End Date</label>
+              <div class="input-group">
+                <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dpEnd" ngbDatepicker
+                  #dpEnd="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dpEnd.toggle()" type="button"><i
+                      class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <app-customer-selector></app-customer-selector>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </span>
+</ng-template>

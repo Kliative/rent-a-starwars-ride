@@ -21,14 +21,14 @@ export class DataService {
       vehicleObj: (): Observable<SWVehicleObj> => {
         return this.http.get<SWVehicleObj>(`https://swapi.co/api/vehicles`);
       },
-      vehiclesSingle: (vehicleNum:number): Observable<SWVehicle> => {
-        return this.http.get<SWVehicle>(`https://swapi.co/api/vehicles${vehicleNum}`);
+      vehiclesSingle: (vehicleUrl:string): Observable<SWVehicle> => {
+        return this.http.get<SWVehicle>(vehicleUrl);
       },
       starShipObj:(): Observable<SWVStarShipObj> => {
         return this.http.get<SWVStarShipObj>(`https://swapi.co/api/starships`);
       },
-      starShipSingle: (starShipnum:number): Observable<SWVStarShip> => {
-        return this.http.get<SWVStarShip>(`https://swapi.co/api/starships${starShipnum}`);
+      starShipSingle: (starShipUrl:string): Observable<SWVStarShip> => {
+        return this.http.get<SWVStarShip>(starShipUrl);
       }
     }
   }
