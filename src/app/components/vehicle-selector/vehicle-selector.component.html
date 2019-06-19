@@ -1,0 +1,177 @@
+<div class="card shadow bg-dark">
+
+  <div class="card-body">
+    <div class="card-title">
+      <h2 class="text-light">
+        <i *ngIf="toggleVSS" class="fa fa-fighter-jet" aria-hidden="true"></i>
+        <i *ngIf="!toggleVSS" class="fa fa-space-shuttle" aria-hidden="true"></i>
+        {{ toggleVSS ? vTitle : ssTitle }}
+        <button class="btn btn-sm btn-outline-light float-right" (click)="toggleVehicleStarShip()">
+          or view our <strong>{{ toggleVSS ? ssTitle : vTitle }}</strong>
+        </button>
+      </h2>
+    </div>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Model</th>
+          <th scope="col">Manufacturer</th>
+          <th scope="col">Class</th>
+          <th scope="col">Cost</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <div *ngIf="toggleVSS; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <tbody *ngIf="SWVehicleObj">
+          <tr *ngFor="let vehicle of SWVehicleObj.results; index as i">
+            <th scope="row">{{i}}</th>
+            <td>{{vehicle.name}}</td>
+            <td>{{vehicle.model}}</td>
+            <td>{{vehicle.manufacturer}}</td>
+            <td>{{vehicle.vehicle_class}}</td>
+            <td
+              [ngClass]="{'text-light':!isVehicleBooked(vehicle.cost_in_credits), 'text-danger':isVehicleBooked(vehicle.cost_in_credits)}">
+              {{  isVehicleBooked(vehicle.cost_in_credits) ? 'BOOKED' : vehicle.cost_in_credits | number }}</td>
+            <td>
+              <button (click)="open(content,vehicle.url, true)"
+                [ngClass]="{'btn-outline-warning':!isVehicleBooked(vehicle.cost_in_credits), 'btn-danger':isVehicleBooked(vehicle.cost_in_credits)}"
+                class="btn btn-sm btn-outline-warning">Reserve</button>
+            </td>
+          </tr>
+        </tbody>
+      </ng-template>
+      <ng-template #elseBlock>
+        <tbody *ngIf="SWStarShipObj">
+          <tr *ngFor="let starShip of SWStarShipObj.results; index as i">
+            <th scope="row">{{i}}</th>
+            <td>{{starShip.name}}</td>
+            <td>{{starShip.model}}</td>
+            <td>{{starShip.manufacturer}}</td>
+            <td>{{starShip.starship_class}}</td>
+            <td
+              [ngClass]="{'text-light':!isVehicleBooked(starShip.cost_in_credits), 'text-danger':isVehicleBooked(starShip.cost_in_credits)}">
+              {{  isVehicleBooked(starShip.cost_in_credits) ? 'BOOKED' : starShip.cost_in_credits | number }}</td>
+            <td>
+              <button (click)="open(content,starShip.url, false)"
+                [ngClass]="{'btn-outline-warning':!isVehicleBooked(starShip.cost_in_credits), 'btn-danger':isVehicleBooked(starShip.cost_in_credits)}"
+                class="btn btn-sm">{{  isVehicleBooked(starShip.cost_in_credits) ? 'BOOKED' : 'Reserve' }}</button>
+            </td>
+          </tr>
+        </tbody>
+      </ng-template>
+
+    </table>
+  </div>
+  <div class="card-footer">
+    <!-- Add buttons for pagination -->
+  </div>
+</div>
+
+
+<ng-template #content let-modal>
+  <span *ngIf="staggedModal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        <button class="btn"
+          [ngClass]="{ 'btn-success': !staggedModal.bookingstatus, 'btn-danger':staggedModal.bookingstatus }"
+          [disabled]="true">{{ staggedModal.booked[0].bookingstatus ? 'BOOKED' : 'Availible' }}</button>
+        Book the <strong>{{staggedModal.booked[0].model | titlecase}}</strong>
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="staggedModal.bookingstatus" class="text-center">
+        <h2>
+          <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+          <br>
+          Sorry this ride appears to be Booked out
+          <br>
+          Please Select another
+        </h2>
+      </div>
+      <div *ngIf="!staggedModal.bookingstatus">
+
+        <!-- Details -->
+        <div class="row">
+          <div class="col-12">
+            <h4>{{staggedModal.booked[0].model | titlecase}} Details</h4>
+          </div>
+          <div class="col-6">
+            <div class="form-groug">
+              <strong>Name</strong>
+              <p>{{staggedModal.vehicleObj.name}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Manufacturer</strong>
+              <p>{{staggedModal.vehicleObj.manufacturer}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Cost</strong>
+              <p>{{staggedModal.vehicleObj.cost_in_credits}}</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-groug">
+              <strong>Consumables</strong>
+              <p>{{staggedModal.vehicleObj.consumables}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Passengers</strong>
+              <p>{{staggedModal.vehicleObj.passengers}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Cargo capacity</strong>
+              <p>{{staggedModal.vehicleObj.cargo_capacity}}</p>
+            </div>
+          </div>
+        </div>
+        <!-- Date Picker -->
+        <form>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="dateOfBirth">Start Date</label>
+                <div class="input-group">
+                  <input [(ngModel)]="staggedModal.from" id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd"
+                    name="dpStart" ngbDatepicker #dpStart="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="dpStart.toggle()" type="button"><i
+                        class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="dateOfBirth">End Date</label>
+                <div class="input-group">
+                  <input [(ngModel)]="staggedModal.to" id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd"
+                    name="dpEnd" ngbDatepicker #dpEnd="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="dpEnd.toggle()" type="button"><i
+                        class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="staggedModal.email" class="alert alert-success" role="alert">
+          Reseverd For {{staggedModal.email}}
+        </div>
+        <app-customer-selector *ngIf="randomUserObj" [randomUserObj]="randomUserObj"
+          (valueChange)="selectedUserForReservation($event)"></app-customer-selector>
+      </div>
+    </div>
+    <div *ngIf="!staggedModal.bookingstatus" class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" [disabled]="!staggedModal.email" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </span>
+</ng-template>

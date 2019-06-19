@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RandomUsers, RandomUser } from '../../models/user.model';
 @Component({
   selector: 'app-customer-selector',
@@ -7,13 +6,19 @@ import { RandomUsers, RandomUser } from '../../models/user.model';
   styleUrls: ['./customer-selector.component.css']
 })
 export class CustomerSelectorComponent implements OnInit {
+  @Output() valueChange = new EventEmitter();
+  @Input() randomUserObj: RandomUsers;
+  buttonActived = false;
+  randomUser: RandomUser[];
 
-  randomUserObj:RandomUsers;
-  randomUser:RandomUser[];
-
-  constructor(private _rndmUsrSrv: DataService) { }
+  constructor() { }
 
   ngOnInit() {
+
   }
 
+  userResevredPressed(user: RandomUser): void {
+    user.active = true;
+    this.valueChange.emit(user);
+  }
 }
