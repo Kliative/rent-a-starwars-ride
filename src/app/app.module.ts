@@ -8,10 +8,11 @@ import { DataService } from './services/data.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { VehicleSelectorComponent } from './components/vehicle-selector/vehicle-selector.component';
 import { CustomerSelectorComponent } from './components/customer-selector/customer-selector.component';
+import { CurrentlyRentedOutComponent } from './components/currently-rented-out/currently-rented-out.component';
 
 @NgModule({
   imports: [BrowserModule, FormsModule, NgbModule.forRoot(), HttpClientModule],
-  declarations: [AppComponent, VehicleSelectorComponent, CustomerSelectorComponent],
+  declarations: [AppComponent, VehicleSelectorComponent, CustomerSelectorComponent, CurrentlyRentedOutComponent],
   bootstrap: [AppComponent],
   providers: [DataService]
 })

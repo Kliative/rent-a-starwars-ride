@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { SWVehicleObj, SWVehicle } from '../../models/SWVehicle.model';
 import { SWVStarShipObj, SWVStarShip } from '../../models/SWStarShip.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationObj } from '../../models/reservationModal.model';
+import { RandomUser, RandomUsers } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-vehicle-selector',
@@ -11,6 +12,8 @@ import { ReservationObj } from '../../models/reservationModal.model';
   styleUrls: ['./vehicle-selector.component.css']
 })
 export class VehicleSelectorComponent implements OnInit {
+  @Input() randomUserObj: RandomUsers;
+  @Output() reservationEvent = new EventEmitter();
 
   SWVehicleObj: SWVehicleObj;
   SWStarShipObj: SWVStarShipObj;
@@ -46,15 +49,12 @@ export class VehicleSelectorComponent implements OnInit {
 
   // Modal
 
-  getSWShip(url: string): void {
 
+  selectedUserForReservation(user: RandomUser): void {
+    this.staggedModal.name = user.name.first + user.name.last;
+    this.staggedModal.email = user.email;
   }
 
-  getSWVehicle(url: string): void {
-    this._dS.getSWDataFactory().vehiclesSingle(url).subscribe((res: SWVehicle) => {
-      this.sWVehicle = res;
-    });
-  }
 
   open(content: NgbModal, url: string, isVehicle: boolean) {
 
@@ -75,21 +75,26 @@ export class VehicleSelectorComponent implements OnInit {
       });
     }
 
-
-
     // Modal
     this.modalService.open(content, { size: 'lg' }).result.then((result) => {
       // close Modal
       this.closeResult = `Closed with: ${result}`;
+      this.saveBooking();
+      delete this.staggedModal;
     }, (reason) => {
+      delete this.staggedModal;
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+
   }
 
   createNewReservationObj(vhcleOrStrShip: SWVehicle | SWVStarShip): ReservationObj {
     let staggedModal = new ReservationObj();
-    staggedModal.model = vhcleOrStrShip.model;
-    staggedModal.urlID = vhcleOrStrShip.url;
+    staggedModal.booked.push({
+      model: vhcleOrStrShip.model,
+      urlID: vhcleOrStrShip.url
+    })
+    staggedModal.bookingstatus = this.isVehicleBooked(vhcleOrStrShip.cost_in_credits);
     return staggedModal;
   }
 
@@ -110,5 +115,7 @@ export class VehicleSelectorComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
+  saveBooking(): void {
+    this.reservationEvent.emit(this.staggedModal);
+  }
 }

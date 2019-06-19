@@ -9,12 +9,12 @@ export interface SWVehicle {
     name: string;
     model: string;
     manufacturer: string;
-    cost_in_credits: string | number;
-    length: string | number;
+    cost_in_credits: string;
+    length: string;
     max_atmosphering_speed: string;
-    crew: string | number;
-    passengers: string | number;
-    cargo_capacity: string | number;
+    crew: string;
+    passengers: string;
+    cargo_capacity: string;
     consumables: string;
     vehicle_class: string;
     pilots: string[],
