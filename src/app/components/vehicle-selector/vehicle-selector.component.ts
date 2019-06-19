@@ -1,17 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { SWVehicleObj, SWVehicle } from '../../models/SWVehicle.model';
 import { SWVStarShipObj, SWVStarShip } from '../../models/SWStarShip.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationObj } from '../../models/reservationModal.model';
 import { RandomUser, RandomUsers } from '../../models/user.model';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-vehicle-selector',
   templateUrl: './vehicle-selector.component.html',
   styleUrls: ['./vehicle-selector.component.css']
 })
-export class VehicleSelectorComponent implements OnInit {
+export class VehicleSelectorComponent implements OnInit, OnDestroy {
   @Input() randomUserObj: RandomUsers;
   @Output() reservationEvent = new EventEmitter();
 
@@ -22,6 +23,9 @@ export class VehicleSelectorComponent implements OnInit {
   sWStarShip: SWVStarShip;
 
   staggedModal: ReservationObj;
+
+  starShipSingleSub: Subscription;
+  vehiclesSingleSub: Subscription;
 
   toggleVSS = true;
   ssTitle: string;
@@ -34,6 +38,15 @@ export class VehicleSelectorComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  }
+  ngOnDestroy() {
+    if (this.starShipSingleSub) {
+      this.starShipSingleSub.unsubscribe();
+    }
+    if (this.vehiclesSingleSub) {
+      this.vehiclesSingleSub.unsubscribe();
+    }
 
   }
 
@@ -52,14 +65,14 @@ export class VehicleSelectorComponent implements OnInit {
 
     // Check if Vehicle
     if (isVehicle) {
-      this._dS.getSWDataFactory().starShipSingle(url).subscribe((res: SWVStarShip) => {
+      this.starShipSingleSub = this._dS.getSWDataFactory().starShipSingle(url).subscribe((res: SWVStarShip) => {
         if (res) {
           this.sWStarShip = res;
           this.staggedModal = this.createNewReservationObj(this.sWStarShip);
         }
       });
     } else {
-      this._dS.getSWDataFactory().vehiclesSingle(url).subscribe((res: SWVehicle) => {
+      this.vehiclesSingleSub = this._dS.getSWDataFactory().vehiclesSingle(url).subscribe((res: SWVehicle) => {
         if (res) {
           this.sWVehicle = res;
           this.staggedModal = this.createNewReservationObj(this.sWVehicle);
@@ -69,7 +82,6 @@ export class VehicleSelectorComponent implements OnInit {
 
     // Modal
     this.modalService.open(content, { size: 'lg' }).result.then((result) => {
-      // close Modal
       this.closeResult = `Closed with: ${result}`;
       this.saveBooking();
       delete this.staggedModal;

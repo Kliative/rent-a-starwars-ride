@@ -20,7 +20,7 @@ export class AddNewVehicleComponent implements OnInit {
       vehicle_class: '',
       starship_class: '',
       cost_in_credits: Number(''),
-      url: 'https://swapi.co/api/starships/9/'
+      url: 'New'
     });
   }
   toggleSubmit(): void {
@@ -33,7 +33,7 @@ export class AddNewVehicleComponent implements OnInit {
       vehicle_class: '',
       starship_class: '',
       cost_in_credits: Number(''),
-      url: 'https://swapi.co/api/starships/9/'
+      url: 'New'
     });
   }
 
