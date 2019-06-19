@@ -1,28 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationObj } from './models/reservationModal.model';
 import { DataService } from './services/data.service';
 import { RandomUsers } from './models/user.model';
 import { SWVehicleObj } from './models/SWVehicle.model';
 import { SWVStarShipObj } from './models/SWStarShip.model';
+import { Subscription } from 'rxjs/internal/Subscription';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   name = 'Angular';
   closeResult: string;
   randomUserObj: RandomUsers;
-  currentlyRentedOut: ReservationObj[] = [];
+
 
   SWVehicleObj: SWVehicleObj;
   SWStarShipObj: SWVStarShipObj;
 
-  start: ReservationObj[] = [{
+  getRandomUsersSub: Subscription;
+  vehicleObjSub: Subscription;
+  starShipObjSub: Subscription;
+
+
+  // Exmaple Data
+  currentlyRentedOut: ReservationObj[] = [{
     booked: [{
       model: 'Executor-class star dreadnought',
       urlID: 'https://swapi.co/api/starships/15/'
+    },
+    {
+      model: 'DS-1 Orbital Battle Station',
+      urlID: 'https://swapi.co/api/starships/9/'
     }],
     name: 'Minttu Keranen',
     email: 'minttu.keranen@example.com',
@@ -41,6 +52,10 @@ export class AppComponent implements OnInit {
     booked: [{
       model: 'DS-1 Orbital Battle Station',
       urlID: 'https://swapi.co/api/starships/9/'
+    },
+    {
+      model: 'Executor-class star dreadnought',
+      urlID: 'https://swapi.co/api/starships/15/'
     }],
     name: 'Toby Lee',
     email: 'toby.lee@example.com',
@@ -66,16 +81,28 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
   }
+  ngOnDestroy(): void {
+    if (this.getRandomUsersSub) {
+      this.getRandomUsersSub.unsubscribe();
+    }
+    if (this.vehicleObjSub) {
+      this.vehicleObjSub.unsubscribe();
+    }
+    if (this.starShipObjSub) {
+      this.starShipObjSub.unsubscribe()
+    }
+  }
+
   loadData() {
-    this.currentlyRentedOut = this.start;
-    this._rndmUsrSrv.getRandomUsers(5).subscribe((result: any) => {
+
+    this.getRandomUsersSub = this._rndmUsrSrv.getRandomUsers(5).subscribe((result: any) => {
       this.randomUserObj = result;
     })
-    this._dS.getSWDataFactory().vehicleObj().subscribe((results: SWVehicleObj) => {
+    this.vehicleObjSub = this._dS.getSWDataFactory().vehicleObj().subscribe((results: SWVehicleObj) => {
       this.SWVehicleObj = results;
     });
 
-    this._dS.getSWDataFactory().starShipObj().subscribe((results: SWVStarShipObj) => {
+    this.starShipObjSub = this._dS.getSWDataFactory().starShipObj().subscribe((results: SWVStarShipObj) => {
       this.SWStarShipObj = results;
     });
   }
