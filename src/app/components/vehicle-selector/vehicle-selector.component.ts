@@ -43,7 +43,7 @@ export class VehicleSelectorComponent implements OnInit {
 
   // Modal
   selectedUserForReservation(user: RandomUser): void {
-    this.staggedModal.name = user.name.first + user.name.last;
+    this.staggedModal.name = `${user.name.first} ${user.name.last}`;
     this.staggedModal.email = user.email;
   }
 

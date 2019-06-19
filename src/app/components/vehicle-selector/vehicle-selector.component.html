@@ -163,12 +163,15 @@
             </div>
           </div>
         </form>
+        <div *ngIf="staggedModal.email" class="alert alert-success" role="alert">
+          Reseverd For {{staggedModal.email}}
+        </div>
         <app-customer-selector *ngIf="randomUserObj" [randomUserObj]="randomUserObj"
           (valueChange)="selectedUserForReservation($event)"></app-customer-selector>
       </div>
     </div>
     <div *ngIf="!staggedModal.bookingstatus" class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+      <button type="button" class="btn btn-outline-dark" [disabled]="!staggedModal.email" (click)="modal.close('Save click')">Save</button>
     </div>
   </span>
 </ng-template>

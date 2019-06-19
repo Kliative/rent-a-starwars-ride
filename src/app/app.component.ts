@@ -24,8 +24,8 @@ export class AppComponent implements OnInit {
       model: 'Executor-class star dreadnought',
       urlID: 'https://swapi.co/api/starships/15/'
     }],
-    name: 'maevaginnish',
-    email: 'maeva.ginnish@example.com',
+    name: 'Minttu Keranen',
+    email: 'minttu.keranen@example.com',
     from: {
       year: 2019,
       month: 6,
