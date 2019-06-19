@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DataService } from '../../services/data.service';
-import { RandomUsers, RandomUser } from '../../models/user.model';
-import { ReservationObj } from 'src/app/models/reservationModal.model';
+import { RandomUsers } from '../../models/user.model';
+import { ReservationObj } from '../../models/reservationModal.model';
 
 @Component({
   selector: 'app-currently-rented-out',

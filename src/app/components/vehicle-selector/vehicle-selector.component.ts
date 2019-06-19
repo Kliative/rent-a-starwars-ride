@@ -4,7 +4,7 @@ import { SWVehicleObj, SWVehicle } from '../../models/SWVehicle.model';
 import { SWVStarShipObj, SWVStarShip } from '../../models/SWStarShip.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationObj } from '../../models/reservationModal.model';
-import { RandomUser, RandomUsers } from 'src/app/models/user.model';
+import { RandomUser, RandomUsers } from '../../models/user.model';
 
 @Component({
   selector: 'app-vehicle-selector',
