@@ -97,7 +97,7 @@ export class AppComponent implements OnInit {
   }
 
   addNewVehicle(e): void {
-    switch (e) {
+    switch (e.type) {
       case 'V':
         this.SWVehicleObj.results.unshift(e);
         break;

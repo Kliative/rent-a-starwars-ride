@@ -19,7 +19,7 @@ export class AddNewVehicleComponent implements OnInit {
       manufacturer: '',
       vehicle_class: '',
       starship_class: '',
-      cost_in_credits: '',
+      cost_in_credits: Number(''),
       url: 'https://swapi.co/api/starships/9/'
     });
   }
@@ -32,7 +32,7 @@ export class AddNewVehicleComponent implements OnInit {
       manufacturer: '',
       vehicle_class: '',
       starship_class: '',
-      cost_in_credits: '',
+      cost_in_credits: Number(''),
       url: 'https://swapi.co/api/starships/9/'
     });
   }
