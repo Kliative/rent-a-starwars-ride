@@ -3,6 +3,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ReservationObj } from './models/reservationModal.model';
 import { DataService } from './services/data.service';
 import { RandomUsers } from './models/user.model';
+import { SWVehicleObj } from './models/SWVehicle.model';
+import { SWVStarShipObj } from './models/SWStarShip.model';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
@@ -13,6 +15,9 @@ export class AppComponent implements OnInit {
   closeResult: string;
   randomUserObj: RandomUsers;
   currentlyRentedOut: ReservationObj[] = [];
+
+  SWVehicleObj: SWVehicleObj;
+  SWStarShipObj: SWVStarShipObj;
 
   start: ReservationObj[] = [{
     booked: [{
@@ -53,20 +58,33 @@ export class AppComponent implements OnInit {
   }]
 
 
-  constructor(private modalService: NgbModal, private _rndmUsrSrv: DataService) { }
+  constructor(
+    private modalService: NgbModal,
+    private _rndmUsrSrv: DataService,
+    private _dS: DataService) { }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+  loadData() {
     this.currentlyRentedOut = this.start;
     this._rndmUsrSrv.getRandomUsers(5).subscribe((result: any) => {
       this.randomUserObj = result;
     })
+    this._dS.getSWDataFactory().vehicleObj().subscribe((results: SWVehicleObj) => {
+      this.SWVehicleObj = results;
+    });
+
+    this._dS.getSWDataFactory().starShipObj().subscribe((results: SWVStarShipObj) => {
+      this.SWStarShipObj = results;
+    });
   }
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      this.closeResult = `Dismissed`;
     });
   }
   saveReservation(e: ReservationObj): void {
@@ -78,7 +96,20 @@ export class AppComponent implements OnInit {
     }
   }
 
-  findUserWithBooking(nameKey, myArray) {
+  addNewVehicle(e): void {
+    switch (e) {
+      case 'V':
+        this.SWVehicleObj.results.unshift(e);
+        break;
+      case 'SS':
+        this.SWStarShipObj.results.unshift(e);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private findUserWithBooking(nameKey, myArray) {
     for (var i = 0; i < myArray.length; i++) {
       if (myArray[i].email === nameKey) {
         return myArray[i];
@@ -86,14 +117,4 @@ export class AppComponent implements OnInit {
     }
   }
 
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 }

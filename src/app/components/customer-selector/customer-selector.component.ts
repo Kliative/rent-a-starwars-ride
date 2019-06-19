@@ -8,6 +8,7 @@ import { RandomUsers, RandomUser } from '../../models/user.model';
 export class CustomerSelectorComponent implements OnInit {
   @Output() valueChange = new EventEmitter();
   @Input() randomUserObj: RandomUsers;
+  buttonActived = false;
   randomUser: RandomUser[];
 
   constructor() { }
@@ -16,7 +17,8 @@ export class CustomerSelectorComponent implements OnInit {
 
   }
 
-  userResevredPressed(user:RandomUser): void {
+  userResevredPressed(user: RandomUser): void {
+    user.active = true;
     this.valueChange.emit(user);
   }
 }

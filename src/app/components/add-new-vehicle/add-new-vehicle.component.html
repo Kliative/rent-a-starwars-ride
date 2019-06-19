@@ -1,0 +1,58 @@
+<div class="card shadow bg-dark">
+  <div class="card-body" *ngIf="!submitted">
+    <div class="card-title">
+      <h2 class="text-light">Add New Vehicle</h2>
+    </div>
+    <form [formGroup]="newVehicle" (ngSubmit)="onSubmit(myForm)">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label class="text-light">Vehicle Type</label>
+            <select class="form-control" formControlName="type">
+              <option disabled selected [value]="'NULL'">Select..</option>
+              <option value="V">Vehicle</option>
+              <option value="SS">Star Ship</option>
+            </select>
+            <small class="text-danger" *ngIf="!newVehicle.value.type">
+                Type is required
+              </small>
+          </div>
+          <div class="form-group">
+            <label class="text-light">Name</label>
+            <input formControlName="name" class="form-control" placeholder="eg. Falcon">
+            <small class="text-danger" *ngIf="!newVehicle.value.name">
+                Name is required
+              </small>
+          </div>
+          <div class="form-group">
+            <label class="text-light">Model</label>
+            <input formControlName="model" class="form-control" placeholder="eg. XT33-ZR">
+          </div>
+          <div class="form-group">
+            <label class="text-light">Manufacturer</label>
+            <input formControlName="manufacturer" class="form-control" placeholder="eg. Empire">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group" *ngIf="newVehicle.value.type === 'V'">
+            <label class="text-light">Vehicle Class</label>
+            <input formControlName="vehicle_class" class="form-control" placeholder="eg. 2nd">
+          </div>
+          <div class="form-group" *ngIf="newVehicle.value.type === 'SS'">
+            <label class="text-light">Star Ship Class</label>
+            <input formControlName="starship_class" class="form-control" placeholder="eg. 2nd">
+          </div>
+          <div class="form-group">
+            <label class="text-light">Cost</label>
+            <input formControlName="cost_in_credits" class="form-control" placeholder="0.0">
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-outline-warning" [disabled]="!newVehicle.value.name && !newVehicle.value.type" type="submit">Submit</button>
+    </form>
+  </div>
+  <div class="card-body text-center" *ngIf="submitted">
+    <h1 class="text-light">Thank your for submitting</h1>
+    <button class="btn btn-warning" (click)="toggleSubmit()">Sumbit Again</button>
+  </div>
+</div>

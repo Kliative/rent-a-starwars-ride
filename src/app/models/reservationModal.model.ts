@@ -1,3 +1,7 @@
+import { SWVehicle } from "./SWVehicle.model";
+
+import { SWVStarShip } from "./SWStarShip.model";
+
 export class ReservationObj {
     booked: BookedVehicle[];
     name: string;
@@ -5,6 +9,7 @@ export class ReservationObj {
     from: DateCustom;
     to: DateCustom;
     bookingstatus: boolean;
+    vehicleObj?: Object;
     constructor() {
         this.booked = [];
         this.name = '';
@@ -12,6 +17,7 @@ export class ReservationObj {
         this.from = new DateCustom();
         this.to = new DateCustom();
         this.bookingstatus = false;
+        this.vehicleObj = {};
     }
 }
 

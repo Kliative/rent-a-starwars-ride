@@ -9,6 +9,7 @@ export interface RandomUsers {
 }
 
 export interface RandomUser {
+    active?:boolean;
     gender: string;
     name: {
         title: string;

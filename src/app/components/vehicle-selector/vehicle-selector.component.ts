@@ -15,15 +15,15 @@ export class VehicleSelectorComponent implements OnInit {
   @Input() randomUserObj: RandomUsers;
   @Output() reservationEvent = new EventEmitter();
 
-  SWVehicleObj: SWVehicleObj;
-  SWStarShipObj: SWVStarShipObj;
+  @Input() SWVehicleObj: SWVehicleObj;
+  @Input() SWStarShipObj: SWVStarShipObj;
 
   sWVehicle: SWVehicle;
   sWStarShip: SWVStarShip;
 
   staggedModal: ReservationObj;
 
-  toggleVSS = false;
+  toggleVSS = true;
   ssTitle: string;
   vTitle: string;
   closeResult: string;
@@ -34,13 +34,7 @@ export class VehicleSelectorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._dS.getSWDataFactory().vehicleObj().subscribe((results: SWVehicleObj) => {
-      this.SWVehicleObj = results;
-    });
 
-    this._dS.getSWDataFactory().starShipObj().subscribe((results: SWVStarShipObj) => {
-      this.SWStarShipObj = results;
-    });
   }
 
   toggleVehicleStarShip(): void {
@@ -48,8 +42,6 @@ export class VehicleSelectorComponent implements OnInit {
   }
 
   // Modal
-
-
   selectedUserForReservation(user: RandomUser): void {
     this.staggedModal.name = user.name.first + user.name.last;
     this.staggedModal.email = user.email;
@@ -92,8 +84,9 @@ export class VehicleSelectorComponent implements OnInit {
     let staggedModal = new ReservationObj();
     staggedModal.booked.push({
       model: vhcleOrStrShip.model,
-      urlID: vhcleOrStrShip.url
+      urlID: vhcleOrStrShip.url,
     })
+    staggedModal.vehicleObj = vhcleOrStrShip;
     staggedModal.bookingstatus = this.isVehicleBooked(vhcleOrStrShip.cost_in_credits);
     return staggedModal;
   }

@@ -3,11 +3,11 @@
   <div class="card-body">
     <div class="card-title">
       <h2 class="text-light">
-        <i *ngIf="!toggleVSS" class="fa fa-fighter-jet" aria-hidden="true"></i>
-        <i *ngIf="toggleVSS" class="fa fa-space-shuttle" aria-hidden="true"></i>
-        {{ toggleVSS ? ssTitle : vTitle }}
+        <i *ngIf="toggleVSS" class="fa fa-fighter-jet" aria-hidden="true"></i>
+        <i *ngIf="!toggleVSS" class="fa fa-space-shuttle" aria-hidden="true"></i>
+        {{ toggleVSS ? vTitle : ssTitle }}
         <button class="btn btn-sm btn-outline-light float-right" (click)="toggleVehicleStarShip()">
-          or view our <strong>{{ toggleVSS ? vTitle : ssTitle }}</strong>
+          or view our <strong>{{ toggleVSS ? ssTitle : vTitle }}</strong>
         </button>
       </h2>
     </div>
@@ -77,8 +77,8 @@
       <h4 class="modal-title" id="modal-basic-title">
         <button class="btn"
           [ngClass]="{ 'btn-success': !staggedModal.bookingstatus, 'btn-danger':staggedModal.bookingstatus }"
-          [disabled]="true">{{ staggedModal.bookingstatus ? 'BOOKED' : 'Availible' }}</button>
-        Book the <strong>{{staggedModal.model | titlecase}}</strong>
+          [disabled]="true">{{ staggedModal.booked[0].bookingstatus ? 'BOOKED' : 'Availible' }}</button>
+        Book the <strong>{{staggedModal.booked[0].model | titlecase}}</strong>
       </h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -87,7 +87,7 @@
     <div class="modal-body">
       <div *ngIf="staggedModal.bookingstatus" class="text-center">
         <h2>
-            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+          <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
           <br>
           Sorry this ride appears to be Booked out
           <br>
@@ -95,6 +95,42 @@
         </h2>
       </div>
       <div *ngIf="!staggedModal.bookingstatus">
+
+        <!-- Details -->
+        <div class="row">
+          <div class="col-12">
+            <h4>{{staggedModal.booked[0].model | titlecase}} Details</h4>
+          </div>
+          <div class="col-6">
+            <div class="form-groug">
+              <strong>Name</strong>
+              <p>{{staggedModal.vehicleObj.name}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Manufacturer</strong>
+              <p>{{staggedModal.vehicleObj.manufacturer}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Cost</strong>
+              <p>{{staggedModal.vehicleObj.cost_in_credits}}</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-groug">
+              <strong>Consumables</strong>
+              <p>{{staggedModal.vehicleObj.consumables}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Passengers</strong>
+              <p>{{staggedModal.vehicleObj.passengers}}</p>
+            </div>
+            <div class="form-groug">
+              <strong>Cargo capacity</strong>
+              <p>{{staggedModal.vehicleObj.cargo_capacity}}</p>
+            </div>
+          </div>
+        </div>
+        <!-- Date Picker -->
         <form>
           <div class="row">
             <div class="col">
@@ -127,8 +163,8 @@
             </div>
           </div>
         </form>
-        {{staggedModal|json}}
-        <app-customer-selector *ngIf="randomUserObj" [randomUserObj]="randomUserObj" (valueChange)="selectedUserForReservation($event)"></app-customer-selector>
+        <app-customer-selector *ngIf="randomUserObj" [randomUserObj]="randomUserObj"
+          (valueChange)="selectedUserForReservation($event)"></app-customer-selector>
       </div>
     </div>
     <div *ngIf="!staggedModal.bookingstatus" class="modal-footer">

@@ -1,4 +1,3 @@
-
 <div class="card shadow">
     <div class="modal-header">
         <h4 class="modal-title">
@@ -11,21 +10,23 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col"><i class="fa fa-user"></i></th>
-                    <th scope="col">Name</th>
-                    <th scope="col">City</th>
-                    <!-- <th scope="col">Email</th> -->
-                    <th scope="col">Action</th>
+                    <th scope="col">Total Vehicles Booked</th>
+                    <th scope="col">Vehicles</th>
                 </tr>
             </thead>
             <tbody *ngIf="randomUserObj">
                 <tr *ngFor="let userBooking of currentlyRentedOut; index as i">
                     <th scope="row">{{i}}</th>
-                    <!-- <td><img class="user-image" src="{{userBooking.thumbnail}}" alt=""></td> -->
                     <td>{{userBooking.name | titlecase }}</td>
                     <td>{{userBooking.booked.length }}</td>
-                    <!-- <td>{{user.email}}</td> -->
                     <td>
-                        <button class="btn btn-sm btn-outline-dark"  (click)="userResevredPressed(user)">Reserve</button>
+                        <div ngbDropdown class="d-inline-block">
+                            <button class="btn btn-outline-dark" id="dropdownBasic-{{i}}" ngbDropdownToggle>Vehicles</button>
+                            <div ngbDropdownMenu attr.aria-labelledby="dropdownBasic-{{i}}">
+                                <p ngbDropdownItem *ngFor="let vehicles of userBooking.booked;">{{vehicles.model}}</p>
+
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
